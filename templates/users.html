@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Users</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 50px;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 50px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button.edit {
+            background-color: #4CAF50;
+        }
+
+        button.delete {
+            background-color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <h1>Users</h1>
+
+    <button onclick="addUser()">Add User</button>
+
+    <form id="add-user-form" style="display: none" action="/users" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br>
+        <label for="contact-info">Contact Info:</label>
+        <input type="text" id="contact-info" name="contact-info" required><br>
+        <button type="submit">Add</button>
+        <button type="button" onclick="toggleForm()">Cancel</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Contact Info</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .users}}
+            <tr>
+                <td>{{.Name}}</td>
+                <td>{{.ContactInfo}}</td>
+                <td>
+                    <button class="edit" onclick="editUser({{.ID}})">Edit</button>
+                    <button class="delete" onclick="deleteUser({{.ID}})">Delete</button>
+                </td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+
+    <script>
+        function addUser() {
+            document.getElementById("add-user-form").style.display = "block";
+        }
+
+        function toggleForm() {
+            const form = document.getElementById("add-user-form");
+            form.style.display = form.style.display === "none" ? "block" : "none";
+        }
+
+        function editUser(id) {
+            const url = "/users/" + id;
+            window.location.href = url;
+        }
+
+        function deleteUser(id) {
+            if (confirm("Are you sure you want to delete this user?")) {
+                const url = "/users/" + id;
+                fetch(url, { method: "DELETE" })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.location.reload();
+                        } else {
+                            alert("Failed to delete the user");
+                        }
+                    })
+                    .catch(error => alert(error));
+            }
+        }
+    </script>
+</body>
+</html>
+

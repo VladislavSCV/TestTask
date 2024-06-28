@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Скворцов Владислав - Бекенд-разработчик</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css');
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #2d2d2d;
+            color: #f0f0f0;
+            overflow-x: hidden;
+        }
+        header {
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 3em;
+            animation: fadeInDown 1.5s ease-out;
+        }
+        header p {
+            margin: 10px 0 0;
+            font-size: 1.2em;
+            animation: fadeInUp 1.5s ease-out;
+        }
+        nav {
+            background-color: #222;
+            padding: 15px 0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+        nav a {
+            color: #f0f0f0;
+            margin: 0 20px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: color 0.3s;
+        }
+        nav a:hover {
+            color: #81a2be;
+        }
+        .content {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+        section {
+            margin-bottom: 60px;
+            opacity: 0;
+            animation: fadeIn 1s forwards;
+        }
+        section:nth-child(even) {
+            animation-delay: 0.5s;
+        }
+        section:nth-child(odd) {
+            animation-delay: 0.3s;
+        }
+        h2 {
+            border-bottom: 2px solid #81a2be;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        .projects .card, .skills .card {
+            background-color: #383838;
+            padding: 20px;
+            margin: 10px 0;
+            border-radius: 5px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .projects .card:hover, .skills .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.3);
+        }
+        .projects ul, .skills ul {
+            list-style-type: none;
+            padding: 0;
+        }
+        .projects li, .skills li {
+            margin: 10px 0;
+        }
+        .contact p {
+            margin: 10px 0;
+            font-size: 1.1em;
+        }
+        .contact a {
+            color: #81a2be;
+            text-decoration: none;
+        }
+        .contact a:hover {
+            text-decoration: underline;
+        }
+        .contact .social-icons {
+            margin-top: 10px;
+        }
+        .contact .social-icons a {
+            color: #f0f0f0;
+            margin: 0 10px;
+            font-size: 1.5em;
+            transition: color 0.3s;
+        }
+        .contact .social-icons a:hover {
+            color: #81a2be;
+        }
+        footer {
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            text-align: center;
+            padding: 20px 0;
+            position: relative;
+        }
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Скворцов Владислав</h1>
+        <p>Бекенд-разработчик</p>
+    </header>
+    <nav>
+        <a href="#about">Обо мне</a>
+        <a href="#projects">Проекты</a>
+        <a href="#skills">Навыки</a>
+        <a href="#contact">Контакты</a>
+    </nav>
+    <div class="content">
+        <section id="about">
+            <h2>Обо мне</h2>
+            <p>Привет! Я Владислав Скворцов, профессиональный бекенд-разработчик с опытом работы в создании масштабируемых веб-приложений. Мне нравится решать сложные задачи и работать с современными технологиями.</p>
+        </section>
+        <section id="projects" class="projects">
+            <h2>Проекты</h2>
+            <ul>
+                <li class="card">Проект 1: Описание проекта 1.</li>
+                <li class="card">Проект 2: Описание проекта 2.</li>
+                <li class="card">Проект 3: Описание проекта 3.</li>
+            </ul>
+        </section>
+        <section id="skills" class="skills">
+            <h2>Навыки</h2>
+            <ul>
+                <li class="card">Язык программирования 1</li>
+                <li class="card">Язык программирования 2</li>
+                <li class="card">Технология 1</li>
+                <li class="card">Технология 2</li>
+            </ul>
+        </section>
+        <section id="contact" class="contact">
+            <h2>Контакты</h2>
+            <p>Электронная почта: <a href="mailto:example@example.com">example@example.com</a></p>
+            <p>LinkedIn: <a href="https://www.linkedin.com/in/example" target="_blank">linkedin.com/in/example</a></p>
+            <div class="social-icons">
+                <a href="https://github.com/example" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="https://twitter.com/example" target="_blank"><i class="fab fa-twitter"></i></a>
+                <a href="https://facebook.com/example" target="_blank"><i class="fab fa-facebook"></i></a>
+            </div>
+        </section>
+    </div>
+    <footer>
+        <p>&copy; 2024 Скворцов Владислав</p>
+    </footer>
+</body>
+</html>

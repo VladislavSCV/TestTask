@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Books</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-top: 50px;
+        }
+
+        button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #555;
+        }
+
+        table {
+            width: 100%;
+            margin-top: 50px;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        button.edit {
+            background-color: #4CAF50;
+        }
+
+        button.delete {
+            background-color: #f44336;
+        }
+    </style>
+</head>
+<body>
+    <h1>Books</h1>
+
+    <button onclick="addBook()">Add Book</button>
+
+    <form id="add-book-form" style="display: none" action="/books" method="post">
+        <label for="title">Title:</label>
+        <input type="text" id="title" name="title" required><br>
+        <label for="author">Author:</label>
+        <input type="text" id="author" name="author" required><br>
+        <label for="publication-year">Publication Year:</label>
+        <input type="number" id="publication-year" name="publication-year" required><br>
+        <label for="genre">Genre:</label>
+        <input type="text" id="genre" name="genre" required><br>
+        <label for="status">Status:</label>
+        <input type="text" id="status" name="status" value="available" required><br>
+        <button type="submit">Add</button>
+        <button type="button" onclick="toggleForm()">Cancel</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Publication Year</th>
+                <th>Genre</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{range .books}}
+            <tr>
+                <td>{{.Title}}</td>
+                <td>{{.Author}}</td>
+                <td>{{.PublicationYear}}</td>
+                <td>{{.Genre}}</td>
+                <td>{{.Status}}</td>
+                <td>
+                    <button class="edit" onclick="editBook({{.ID}})">Edit</button>
+                    <button class="delete" onclick="deleteBook({{.ID}})">Delete</button>
+                </td>
+            </tr>
+            {{end}}
+        </tbody>
+    </table>
+
+    <script>
+        function addBook() {
+            document.getElementById("add-book-form").style.display = "block";
+        }
+
+        function toggleForm() {
+            const form = document.getElementById("add-book-form");
+            form.style.display = form.style.display === "none" ? "block" : "none";
+        }
+
+        function editBook(id) {
+            const url = "/books/" + id;
+            window.location.href = url;
+        }
+
+        function deleteBook(id) {
+            if (confirm("Are you sure you want to delete this book?")) {
+                const url = "/books/" + id;
+                fetch(url, { method: "DELETE" })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            window.location.reload();
+                        } else {
+                            alert("Failed to delete the book");
+                        }
+                    })
+                    .catch(error => alert(error));
+            }
+        }
+    </script>
+
+</body>
+</html>
+

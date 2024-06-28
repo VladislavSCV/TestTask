@@ -3,9 +3,59 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Library</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f2f2f2;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+
+        nav {
+            text-align: center;
+        }
+
+        nav ul {
+            list-style-type: none;
+            padding: 0;
+            display: inline-flex;
+            justify-content: center;
+        }
+
+        nav li {
+            margin: 0 10px;
+        }
+
+        nav a {
+            color: #333;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        nav a:hover {
+            background-color: #333;
+            color: #fff;
+            transition: background-color 0.3s;
+        }
+    </style>
 </head>
 <body>
-    
+    <h1>Welcome to Library App!</h1>
+
+    <nav>
+        <ul>
+            <li><a href="/books">Books</a></li>
+            <li><a href="/users">Users</a></li>
+            <li><a href="/loans">Loans</a></li>
+        </ul>
+    </nav>
+
 </body>
 </html>
+
