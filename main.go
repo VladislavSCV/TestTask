@@ -26,6 +26,7 @@ type Book struct {
 }
 
 type Loan struct {
+	LoanID 	   int    `form:"loanid" json:"loanid"`
 	BookID     int    `form:"bookId" json:"bookId"`
 	UserID     int    `form:"userId" json:"userId"`
 	LoanDate   string `form:"loanDate" json:"loanDate"`
@@ -142,40 +143,40 @@ func main() {
 	})
 
 	router.GET("/loans", func(c *gin.Context) {
-		var books []Book
-		rows, err := conn.Query("SELECT bookid, title, author, publicationyear, genre, status FROM books")
+		var loans []Loan
+		rows, err := conn.Query("SELECT loanid, bookid, userid, loandate, returndate FROM loans")
 		if err != nil {
 			log.Fatal(err)
 		}
 		defer rows.Close()
 		for rows.Next() {
-			var book Book
-			err := rows.Scan(&book.BookId, &book.Title, &book.Author, &book.PublicationYear, &book.Genre, &book.Status)
+			var loan Loan
+			err := rows.Scan(&loan.BookID, &loan.UserID, &loan.LoanDate, &loan.ReturnDate)
 			if err != nil {
 				log.Printf("Error scanning rows: %v", err)
 				continue
 			}
-			books = append(books, book)
+			loans = append(loans, loan)
 		}
 		if err = rows.Err(); err != nil {
 			log.Fatalf("Error retrieving books: %v", err)
 		}
-		log.Println(books)
+		log.Println(loans)
 		c.HTML(http.StatusOK, "books.html", gin.H{
 			"title": "Books",
-			"books": books,
+			"books": loans,
 		})
 	})
 
 	router.POST("/loans", func(c *gin.Context) {
-		var book Book
-		if err := c.Bind(&book); err != nil {
+		var loan Loan
+		if err := c.Bind(&loan); err != nil {
 			log.Printf("Error binding JSON: %v", err)
 			c.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
-		query := "INSERT INTO books (title, author, publicationyear, genre, status) VALUES($1, $2, $3, $4, $5)"
-		_, err := conn.Exec(query, book.Title, book.Author, book.PublicationYear, book.Genre, book.Status)
+		query := "INSERT INTO loan (loanid, bookid, userid, loandate, returndate) VALUES($1, $2, $3, $4)"
+		_, err := conn.Exec(query, loan.LoanID, loan.BookID, loan.UserID, loan.LoanDate, loan.ReturnDate)
 		if err != nil {
 			log.Printf("Error executing query: %v", err)
 			c.AbortWithError(http.StatusInternalServerError, err)
