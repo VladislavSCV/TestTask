@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -32,10 +33,6 @@ type Loan struct {
 	LoanDate   string `form:"loanDate" json:"loanDate"`
 	ReturnDate string `form:"returnDate" json:"returnDate"`
 }
-
-var users []User
-var books []Book
-var loans []Loan
 
 func main() {
 
@@ -144,14 +141,17 @@ func main() {
 
 	router.GET("/loans", func(c *gin.Context) {
 		var loans []Loan
-		rows, err := conn.Query("SELECT loanid, bookid, userid, loandate, returndate FROM loans")
+		query := "SELECT loanid, bookid, userid, loandate, returndate FROM loans"
+		rows, err := conn.Query(query)
 		if err != nil {
-			log.Fatal(err)
+			log.Printf("Error executing query: %v", err)
+			c.AbortWithError(http.StatusInternalServerError, err)
+			return
 		}
 		defer rows.Close()
 		for rows.Next() {
 			var loan Loan
-			err := rows.Scan(&loan.BookID, &loan.UserID, &loan.LoanDate, &loan.ReturnDate)
+			err := rows.Scan(&loan.LoanID, &loan.BookID, &loan.UserID, &loan.LoanDate, &loan.ReturnDate)
 			if err != nil {
 				log.Printf("Error scanning rows: %v", err)
 				continue
@@ -159,12 +159,14 @@ func main() {
 			loans = append(loans, loan)
 		}
 		if err = rows.Err(); err != nil {
-			log.Fatalf("Error retrieving books: %v", err)
+			log.Printf("Error retrieving loans: %v", err)
+			c.AbortWithError(http.StatusInternalServerError, err)
+			return
 		}
 		log.Println(loans)
-		c.HTML(http.StatusOK, "books.html", gin.H{
-			"title": "Books",
-			"books": loans,
+		c.HTML(http.StatusOK, "loans.html", gin.H{
+			"title": "Loans",
+			"loans": loans,
 		})
 	})
 
@@ -175,8 +177,8 @@ func main() {
 			c.AbortWithError(http.StatusBadRequest, err)
 			return
 		}
-		query := "INSERT INTO loan (loanid, bookid, userid, loandate, returndate) VALUES($1, $2, $3, $4)"
-		_, err := conn.Exec(query, loan.LoanID, loan.BookID, loan.UserID, loan.LoanDate, loan.ReturnDate)
+		query := "INSERT INTO loan (bookid, userid, loandate, returndate) VALUES($1, $2, $3, $4)"
+		_, err := conn.Exec(query, loan.BookID, loan.UserID, loan.LoanDate, loan.ReturnDate)
 		if err != nil {
 			log.Printf("Error executing query: %v", err)
 			c.AbortWithError(http.StatusInternalServerError, err)
@@ -185,5 +187,21 @@ func main() {
 		c.Redirect(http.StatusFound, "http://127.0.0.1:8000/books")
 	})
 
-	router.Run(":8000")
+
+	router.POST("/loans/return", func(c *gin.Context) {
+		var loan Loan
+		if err := c.Bind(&loan); err != nil {
+			log.Printf("Error binding JSON: %v", err)
+			c.AbortWithError(http.StatusBadRequest, err)
+			return
+		}
+		query := "UPDATE loan SET returndate = $1 WHERE loanid = $2"
+		_, err := conn.Exec(query, time.Now(), loan.LoanID)
+		if err != nil {
+			log.Printf("Error executing query: %v", err)
+			c.AbortWithError(http.StatusInternalServerError, err)
+			return
+		}
+		c.Redirect(http.StatusFound, "http://127.0.0.1:8000/books")
+	})
 }
