@@ -60,16 +60,22 @@
     <button onclick="addBook()">Add Book</button>
 
     <form id="add-book-form" style="display: none" action="/books" method="post">
+
         <label for="title">Title:</label>
         <input type="text" id="title" name="title" required><br>
+
         <label for="author">Author:</label>
         <input type="text" id="author" name="author" required><br>
+
         <label for="publication-year">Publication Year:</label>
         <input type="number" id="publication-year" name="publication-year" required><br>
+
         <label for="genre">Genre:</label>
         <input type="text" id="genre" name="genre" required><br>
+
         <label for="status">Status:</label>
         <input type="text" id="status" name="status" value="available" required><br>
+        
         <button type="submit">Add</button>
         <button type="button" onclick="toggleForm()">Cancel</button>
     </form>
@@ -94,8 +100,8 @@
                 <td>{{.Genre}}</td>
                 <td>{{.Status}}</td>
                 <td>
-                    <button class="edit" onclick="editBook({{.ID}})">Edit</button>
-                    <button class="delete" onclick="deleteBook({{.ID}})">Delete</button>
+                    <button class="edit" onclick="editBook({{ .BookId }})">Edit</button>
+                    <button class="delete" onclick="deleteBook({{ .BookId }})">Delete</button>
                 </td>
             </tr>
             {{end}}
@@ -136,4 +142,6 @@
 
 </body>
 </html>
+
+
 

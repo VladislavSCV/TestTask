@@ -1,5 +1,5 @@
 CREATE TABLE Loans (
-                       LoanID INT PRIMARY KEY,
+                       LoanID SERIAL PRIMARY KEY,
                        BookID INT,
                        UserID INT,
                        LoanDate DATE,
